@@ -1,11 +1,14 @@
-interface IProps {}
-const ProductCard = ({}: IProps) => {
+import Image from "../Image/Image";
+import Button from "../UI/Button/Button";
+
+const ProductCard = () => {
   return (
     <>
       <div className="border rounded-md p-2 flex flex-col">
-        <img
-          src="https://images.pexels.com/photos/1082653/pexels-photo-1082653.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-          alt=""
+        <Image
+          imageURL="https://images.pexels.com/photos/1082653/pexels-photo-1082653.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          alt={"product Name"}
+          className="rounded-md mb-2"
         />
         <h3>Product card</h3>
         <p>
@@ -20,19 +23,31 @@ const ProductCard = ({}: IProps) => {
 
         <div className="flex justify-between items-center">
           <span>$500,000</span>
-          <img
-            className="w-10 h-10 rounded-full"
-            src="https://images.pexels.com/photos/1082653/pexels-photo-1082653.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            alt=""
+          <Image
+            imageURL="https://images.pexels.com/photos/1082653/pexels-photo-1082653.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            alt={"product Image"}
+            className="w-10 h-10 rounded-full object-center"
           />
         </div>
         <div className="flex justify-between items-center space-x-2 mt-5">
-          <button className="bg-indigo-700 p-2 flex-1 rounded-md text-white">
+          <Button
+            className="bg-indigo-700"
+            width="w-full"
+            onClick={() => {
+              console.log("EDIT");
+            }}
+          >
             EDIT
-          </button>
-          <button className="bg-red-700 p-2 flex-1 rounded-md text-white">
+          </Button>
+          <Button className="bg-red-700" width="w-full">
             DELETE
-          </button>
+          </Button>
+          <Button className="bg-green-700" width="w-full">
+            SUCCESS
+          </Button>
+          <Button className="bg-gray-700" width="w-full">
+            CANCEL
+          </Button>
         </div>
       </div>
     </>
