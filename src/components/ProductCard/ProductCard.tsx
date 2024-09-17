@@ -29,7 +29,7 @@ const ProductCard = ({ product }: IProps) => {
 
         <div className="flex justify-between items-center space-x-2">
           <Button
-            className="bg-indigo-700"
+            className="bg-indigo-700 hover:bg-indigo-800"
             width="w-full"
             onClick={() => {
               console.log("EDIT");
@@ -37,7 +37,7 @@ const ProductCard = ({ product }: IProps) => {
           >
             EDIT
           </Button>
-          <Button className="bg-red-700" width="w-full">
+          <Button className="bg-red-700 hover:bg-red-800" width="w-full">
             DELETE
           </Button>
         </div>
