@@ -19,7 +19,7 @@ function App() {
   }
 
   /* ــــــــRENDERــــــــ */
-  const renderProductList = productList.map((product) => <ProductCard product={product} key={product.id} />);
+  const renderProductList = productList.map((product) => <ProductCard product={product} key={product.id} openModal={open} />);
   const renderAllInputList = formInputsList.map((input) => (
     <div className="flex flex-col">
       <label className="text-sm font-medium text-gray-700 mb-[1px]" htmlFor={input.id}>

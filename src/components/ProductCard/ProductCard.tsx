@@ -4,9 +4,10 @@ import Image from "../Image/Image";
 import Button from "../UI/Button/Button";
 interface IProps {
   product: IProduct;
+  openModal: () => void;
 }
 
-const ProductCard = ({ product }: IProps) => {
+const ProductCard = ({ product, openModal }: IProps) => {
   const { title, description, imageURL, price, category } = product;
   return (
     <>
@@ -28,13 +29,7 @@ const ProductCard = ({ product }: IProps) => {
         </div>
 
         <div className="flex justify-between items-center space-x-2">
-          <Button
-            className="bg-indigo-700 hover:bg-indigo-800"
-            width="w-full"
-            onClick={() => {
-              console.log("EDIT");
-            }}
-          >
+          <Button className="bg-indigo-700 hover:bg-indigo-800" width="w-full" onClick={openModal}>
             EDIT
           </Button>
           <Button className="bg-red-700 hover:bg-red-800" width="w-full">
