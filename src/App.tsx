@@ -7,6 +7,7 @@ import Button from "./components/UI/Button/Button";
 import Input from "./components/UI/Input/Input";
 import { IProduct } from "./Interfaces";
 import { productValidation } from "./Validations";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 function App() {
   const defaultProductObj = {
     title: "",
@@ -22,6 +23,12 @@ function App() {
   /* ــــــــSTATEــــــــ */
   const [isOpen, setIsOpen] = useState(false);
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
+  const [errors, setErrors] = useState({
+    title: "",
+    description: "",
+    imageURL: "",
+    price: "",
+  });
 
   /* ــــــــHANDLERــــــــ */
   const open = () => setIsOpen(true);
@@ -33,6 +40,10 @@ function App() {
       ...product,
       [name]: value,
     });
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
   };
 
   const onCancel = () => {
@@ -42,14 +53,17 @@ function App() {
 
   const submitHandler = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const errors = productValidation({ title: product.title, description: product.description, imageURL: product.imageURL, price: product.price });
-    console.log(errors);
+
+    const { title, description, price, imageURL } = product;
+    const errors = productValidation({ title: title, description: description, imageURL: imageURL, price: price });
+    // console.log(errors);
 
     const hasErrorMsg = Object.values(errors).some((value) => value == "") && Object.values(errors).every((value) => value == "");
+    // console.log(hasErrorMsg);
     if (!hasErrorMsg) {
+      setErrors(errors);
       return;
     }
-
     console.log("SEND THIS PRODUCT TO OUR SERVER");
   };
 
@@ -61,6 +75,7 @@ function App() {
         {input.label}
       </label>
       <Input type="text" id={input.id} name={input.name} value={product[input.name]} onChange={onChangeHandler} />
+      <ErrorMessage msg={errors[input.name]} />
     </div>
   ));
 
@@ -76,7 +91,7 @@ function App() {
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderAllInputList}
           <div className="flex items-center space-x-3">
-            <Button className="bg-indigo-700 hover:bg-indigo-800" width="w-full">
+            <Button className="bg-indigo-700 hover:bg-indigo-800" width="w-full" type="submit">
               Submit
             </Button>
             <Button className="bg-gray-400 hover:bg-gray-500" width="w-full" onClick={onCancel}>
