@@ -9,6 +9,7 @@ import { IProduct } from "./Interfaces";
 import { productValidation } from "./Validations";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import CircleColor from "./components/CircleColor/CircleColor";
+import { v4 as uuid } from "uuid";
 function App() {
   const defaultProductObj = {
     title: "",
@@ -23,6 +24,7 @@ function App() {
   };
   /* ــــــــSTATEــــــــ */
   const [isOpen, setIsOpen] = useState(false);
+  const [products, setProducts] = useState<IProduct[]>(productList);
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
   const [errors, setErrors] = useState({
     title: "",
@@ -66,11 +68,14 @@ function App() {
       setErrors(errors);
       return;
     }
-    console.log("SEND THIS PRODUCT TO OUR SERVER");
+    setProducts((prev) => [{ ...product, id: uuid(), colors: tempColors }, ...prev]);
+    setProduct(defaultProductObj);
+    setTempColors([]);
+    close();
   };
 
   /* ــــــــRENDERــــــــ */
-  const renderProductList = productList.map((product) => <ProductCard product={product} key={product.id} openModal={open} />);
+  const renderProductList = products.map((product) => <ProductCard product={product} key={product.id} openModal={open} />);
   const renderAllInputList = formInputsList.map((input) => (
     <div className="flex flex-col" key={input.id}>
       <label className="text-sm font-medium text-gray-700 mb-[1px]" htmlFor={input.id}>
