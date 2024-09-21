@@ -1,43 +1,62 @@
-"use client";
-
-import { useState } from "react";
-import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
+import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { Fragment } from "react";
 import { categories } from "../../../Data";
+import { ICategory } from "../../../Interfaces";
 
-const SelectMenu = () => {
-  const [selected, setSelected] = useState(categories[3]);
+interface IProps {
+  selected: { name: string; imageURL: string };
+  setSelected: (category: ICategory) => void;
+}
 
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
+
+const SelectMenu = ({ selected, setSelected }: IProps) => {
   return (
     <Listbox value={selected} onChange={setSelected}>
-      <Label className="text-sm font-medium text-gray-700 mb-[1px] block">Category</Label>
-      <div className="relative">
-        <ListboxButton className="relative w-full cursor-default bg-white pl-3 pr-10 text-left text-gray-900 ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 border-[1px] border-gray-300 shadow-md focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded-md px-3 py-2 text-md">
-          <span className="flex items-center">
-            <img alt="" src={selected.imageURL} className="h-5 w-5 flex-shrink-0 rounded-full" />
-            <span className="ml-3 block truncate">{selected.name}</span>
-          </span>
-          <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-            <ChevronUpDownIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
-          </span>
-        </ListboxButton>
-
-        <ListboxOptions className=" z-10 mt-1 max-h-28 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm">
-          {categories.map((category) => (
-            <ListboxOption key={category.id} value={category} className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white">
-              <div className="flex items-center">
-                <img alt="" src={category.imageURL} className="h-5 w-5 flex-shrink-0 rounded-full" />
-                <span className="ml-3 block truncate font-normal group-data-[selected]:font-semibold">{category.name}</span>
-              </div>
-
-              <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden">
-                <CheckIcon aria-hidden="true" className="h-5 w-5" />
+      {({ open }) => (
+        <>
+          <Listbox.Label className="block text-sm font-medium text-gray-900">Category</Listbox.Label>
+          <div className="relative">
+            <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-3 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
+              <span className="flex items-center">
+                <img src={selected.imageURL} alt="" className="h-5 w-5 flex-shrink-0 rounded-full" />
+                <span className="ml-3 block truncate">{selected.name}</span>
               </span>
-            </ListboxOption>
-          ))}
-        </ListboxOptions>
-      </div>
+              <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+              </span>
+            </Listbox.Button>
+
+            <Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+              <Listbox.Options className="absolute z-10 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                {categories.map((category) => (
+                  <Listbox.Option key={category.id} className={({ active }) => classNames(active ? "bg-indigo-600 text-white" : "text-gray-900", "relative cursor-default select-none py-2 pl-3 pr-9")} value={category}>
+                    {({ selected, active }) => (
+                      <>
+                        <div className="flex items-center">
+                          <img src={category.imageURL} alt="" className="h-5 w-5 flex-shrink-0 rounded-full" />
+                          <span className={classNames(selected ? "font-semibold" : "font-normal", "ml-3 block truncate")}>{category.name}</span>
+                        </div>
+
+                        {selected ? (
+                          <span className={classNames(active ? "text-white" : "text-indigo-600", "absolute inset-y-0 right-0 flex items-center pr-4")}>
+                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                          </span>
+                        ) : null}
+                      </>
+                    )}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </Transition>
+          </div>
+        </>
+      )}
     </Listbox>
   );
 };
+
 export default SelectMenu;

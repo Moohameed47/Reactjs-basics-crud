@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import "./App.css";
 import ProductCard from "./components/ProductCard/ProductCard";
 import Modal from "./components/UI/Modal/Modal";
-import { colors, formInputsList, productList } from "./Data";
+import { categories, colors, formInputsList, productList } from "./Data";
 import Button from "./components/UI/Button/Button";
 import Input from "./components/UI/Input/Input";
 import { IProduct } from "./Interfaces";
@@ -32,9 +32,10 @@ function App() {
     description: "",
     imageURL: "",
     price: "",
+    color: "",
   });
   const [tempColors, setTempColors] = useState<string[]>([]);
-
+  const [selctedCategory, setselctedCategory] = useState(categories[0]);
   /* ــــــــHANDLERــــــــ */
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
@@ -60,7 +61,7 @@ function App() {
     event.preventDefault();
 
     const { title, description, price, imageURL } = product;
-    const errors = productValidation({ title: title, description: description, imageURL: imageURL, price: price });
+    const errors = productValidation({ title: title, description: description, imageURL: imageURL, price: price, color: tempColors });
     // console.log(errors);
 
     const hasErrorMsg = Object.values(errors).some((value) => value == "") && Object.values(errors).every((value) => value == "");
@@ -69,7 +70,7 @@ function App() {
       setErrors(errors);
       return;
     }
-    setProducts((prev) => [{ ...product, id: uuid(), colors: tempColors }, ...prev]);
+    setProducts((prev) => [{ ...product, id: uuid(), colors: tempColors, category: selctedCategory }, ...prev]);
     setProduct(defaultProductObj);
     setTempColors([]);
     close();
@@ -87,17 +88,19 @@ function App() {
     </div>
   ));
   const renderProductColors = colors.map((color) => (
-    <CircleColor
-      key={color}
-      color={color}
-      onClick={() => {
-        if (tempColors.includes(color)) {
-          setTempColors((prev) => prev.filter((item) => item !== color));
-          return;
-        }
-        setTempColors((prev) => [...prev, color]);
-      }}
-    />
+    <>
+      <CircleColor
+        key={color}
+        color={color}
+        onClick={() => {
+          if (tempColors.includes(color)) {
+            setTempColors((prev) => prev.filter((item) => item !== color));
+            return;
+          }
+          setTempColors((prev) => [...prev, color]);
+        }}
+      />
+    </>
   ));
   return (
     <>
@@ -111,11 +114,11 @@ function App() {
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderAllInputList}
 
-          <SelectMenu />
+          <SelectMenu selected={selctedCategory} setSelected={setselctedCategory} />
 
           <div className="flex flex-wrap items-center space-x-1">{renderProductColors}</div>
+          <ErrorMessage msg={errors.color} />
           <div className="flex flex-wrap items-center space-x-1">
-            {" "}
             {tempColors.map((color) => (
               <span key={color} className={`p-1 mr-1 mb-1 text-sm rounded-md text-white`} style={{ backgroundColor: color }}>
                 {color}

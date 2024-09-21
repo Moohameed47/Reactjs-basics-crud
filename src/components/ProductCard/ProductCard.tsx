@@ -23,7 +23,7 @@ const ProductCard = ({ product, openModal }: IProps) => {
 
         <div className="flex justify-between items-center">
           <span className="text-lg text-indigo-600 font-semibold">${price}</span>
-          <Image imageURL={imageURL} alt={category.name} className="w-10 h-10 rounded-full object-bottom" />
+          <Image imageURL={category.imageURL} alt={category.name} className="w-10 h-10 rounded-full object-bottom" />
         </div>
 
         <div className="flex justify-between items-center space-x-2">
