@@ -32,7 +32,7 @@ function App() {
     description: "",
     imageURL: "",
     price: "",
-    color: "",
+    colors: "",
   });
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [selctedCategory, setselctedCategory] = useState(categories[0]);
@@ -61,7 +61,7 @@ function App() {
     event.preventDefault();
 
     const { title, description, price, imageURL } = product;
-    const errors = productValidation({ title: title, description: description, imageURL: imageURL, price: price, color: tempColors });
+    const errors = productValidation({ title: title, description: description, imageURL: imageURL, price: price, colors: tempColors });
     // console.log(errors);
 
     const hasErrorMsg = Object.values(errors).some((value) => value == "") && Object.values(errors).every((value) => value == "");
@@ -98,6 +98,7 @@ function App() {
             return;
           }
           setTempColors((prev) => [...prev, color]);
+          setErrors({ ...errors, colors: "" });
         }}
       />
     </>
@@ -117,7 +118,7 @@ function App() {
           <SelectMenu selected={selctedCategory} setSelected={setselctedCategory} />
 
           <div className="flex flex-wrap items-center space-x-1">{renderProductColors}</div>
-          <ErrorMessage msg={errors.color} />
+          <ErrorMessage msg={errors.colors} />
           <div className="flex flex-wrap items-center space-x-1">
             {tempColors.map((color) => (
               <span key={color} className={`p-1 mr-1 mb-1 text-sm rounded-md text-white`} style={{ backgroundColor: color }}>
