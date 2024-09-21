@@ -17,11 +17,6 @@ const ProductCard = ({ product, openModal }: IProps) => {
         <h3 className="text-lg font-semibold">{textSlicer(title, 25)}</h3>
         <p className="text-xs text-gray-500 break-words">{textSlicer(description)}</p>
 
-        <div className="flex items-center space-x-2">
-          <span className="w-5 h-5 bg-indigo-600 rounded-full cursor-pointer" />
-          <span className="w-5 h-5 bg-yellow-600 rounded-full cursor-pointer" />
-          <span className="w-5 h-5 bg-red-600 rounded-full cursor-pointer" />
-        </div>
 
         <div className="flex justify-between items-center">
           <span className="text-lg text-indigo-600 font-semibold">${price}</span>

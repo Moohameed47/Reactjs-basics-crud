@@ -2,12 +2,13 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import "./App.css";
 import ProductCard from "./components/ProductCard/ProductCard";
 import Modal from "./components/UI/Modal/Modal";
-import { formInputsList, productList } from "./Data";
+import { colors, formInputsList, productList } from "./Data";
 import Button from "./components/UI/Button/Button";
 import Input from "./components/UI/Input/Input";
 import { IProduct } from "./Interfaces";
 import { productValidation } from "./Validations";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import CircleColor from "./components/CircleColor/CircleColor";
 function App() {
   const defaultProductObj = {
     title: "",
@@ -29,6 +30,7 @@ function App() {
     imageURL: "",
     price: "",
   });
+  const [tempColors, setTempColors] = useState<string[]>([]);
 
   /* ــــــــHANDLERــــــــ */
   const open = () => setIsOpen(true);
@@ -78,7 +80,19 @@ function App() {
       <ErrorMessage msg={errors[input.name]} />
     </div>
   ));
-
+  const renderProductColors = colors.map((color) => (
+    <CircleColor
+      key={color}
+      color={color}
+      onClick={() => {
+        if (tempColors.includes(color)) {
+          setTempColors((prev) => prev.filter((item) => item !== color));
+          return;
+        }
+        setTempColors((prev) => [...prev, color]);
+      }}
+    />
+  ));
   return (
     <>
       <main className="container">
@@ -90,6 +104,17 @@ function App() {
       <Modal isOpen={isOpen} closeModal={close} title="ADD A NEW PRODUCT">
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderAllInputList}
+
+          <div className="flex flex-wrap items-center space-x-1">{renderProductColors}</div>
+          <div className="flex flex-wrap items-center space-x-1">
+            {" "}
+            {tempColors.map((color) => (
+              <span key={color} className={`p-1 mr-1 mb-1 text-sm rounded-md text-white`} style={{ backgroundColor: color }}>
+                {color}
+              </span>
+            ))}
+          </div>
+
           <div className="flex items-center space-x-3">
             <Button className="bg-indigo-700 hover:bg-indigo-800" width="w-full" type="submit">
               Submit
